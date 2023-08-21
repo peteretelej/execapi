@@ -9,8 +9,11 @@ Exec API enables the execution of predefined commands and scripts on servers via
 
 - Copy `config.json.sample` to `config.json`
 - Update the key value (used for authorizing API requests), and the app details as necessary
-- Build and run execapi
+- Run execapi. Either by,
+    - Grabbing the latest release from the [Releases page](https://github.com/peteretelej/execapi/releases)
+    - Or, building and running `execapi`
 
+Building and running
 ``` sh
 go build -o execapi .
 
