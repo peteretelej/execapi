@@ -1,6 +1,8 @@
 # go-deploy
 
-Go Deploy helps deploy apps on your Linux servers!
+Go Deploy helps deploy apps on your servers!
+
+> Just provides an http API to run your scripts or apps remotely. Can be used for any requirement of that nature.
 
 ## Running Go-Deploy
 ```
@@ -32,6 +34,8 @@ Request full deployment logs with `?verbose=1`, for example:
 POST https://go-deploy.test/deploy/appx?verbose=1 -H "Authorization: Bearer GODEPLOY_KEY"
 ```
 
+### Windows?
+Yes, this also works on Windows, simply provide the directory path in the config.json eg `"dir": "C:\\myapps\\appx"`, and the executable as the script eg `"script": "appx.exe"`.
 
 ## Best Practise
 Consider making godeploy only accessible to your CI/CD pipelines.
