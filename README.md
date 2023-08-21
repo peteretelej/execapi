@@ -44,7 +44,7 @@ curl -X POST http://localhost:8080/run/appx?verbose=1 -H "Authorization: Bearer 
 ```
 
 ### Windows?
-Yes, this also works on Windows, simply provide the directory path in the config.json eg `"dir": "C:\\myapps\\appx"`, and the executable as the script eg `"script": "appx.exe"`.
+Yes, this also works on Windows, simply provide the directory path in the config.json eg `"dir": "C:\\myapps\\appx"`, and the executable as the script eg `"script": "commandx.exe"`.
 
 ## Best Practice
 Please consider configuring Exec API to only be accessible by intended clients. While using pre-defined commands via `config.json` restricts what can be done, it still allows a client to initiate process execution (even though intended) on your servers.

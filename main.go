@@ -22,7 +22,7 @@ type App struct {
 
 type Config struct {
 	Key  string
-	Apps []App `json:"apps"`
+	Apps []*App `json:"apps"`
 }
 
 var config *Config
@@ -41,6 +41,7 @@ func main() {
 	mux.HandleFunc("/run/", handleRun)
 	fmt.Println("Server running at http://localhost:8080")
 
+	log.Printf("apps: %+v", appByName)
 	svr := &http.Server{
 		Addr:         ":8080",
 		Handler:      mux,
@@ -70,7 +71,7 @@ func (c *Config) loadConfig() error {
 	}
 	appByName = make(map[string]*App, len(config.Apps))
 	for _, app := range config.Apps {
-		appByName[app.Name] = &app
+		appByName[app.Name] = app
 	}
 	return nil
 }

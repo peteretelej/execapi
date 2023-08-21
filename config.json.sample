@@ -4,7 +4,7 @@
     {
       "name": "appx",
       "dir": "/home/user/apps/appx",
-      "script": "deploy.sh",
+      "script": "./deploy.sh",
       "timeout": "5m"
     }
   ]
