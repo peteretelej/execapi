@@ -2,8 +2,8 @@
   "apps": [
     {
       "name": "appx",
-      "dir": "C:\\CLI_APPS",
-      "script": "tree.exe",
+      "dir": "/home/user/apps/appx",
+      "script": "deploy.sh",
       "timeout": "5m"
     }
   ]

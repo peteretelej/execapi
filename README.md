@@ -21,9 +21,16 @@ Update `apps` to add different options as desired.
 
 ### Requesting a deployment
 ```
-POST https://go-deploy.test/deploy/appx -X "Authorization: Bearer GODEPLOY_KEY"
+POST https://go-deploy.test/deploy/appx -H "Authorization: Bearer GODEPLOY_KEY"
 ```
-This will attempt to run the script for the app named "appx", and respond with http 200 (success) if deployment succeeds, or http 400 (with failure error) on failure.
+This will attempt to run the script for the app named "appx".
+
+Respond with http 200 (success) if deployment succeeds, or http 400 (with failure error) on failure.
+
+Request full deployment logs with `?verbose=1`, for example:
+```
+POST https://go-deploy.test/deploy/appx?verbose=1 -H "Authorization: Bearer GODEPLOY_KEY"
+```
 
 
 ## Best Practise
