@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -22,7 +21,7 @@ type App struct {
 }
 
 type Config struct {
-	key  string
+	Key  string
 	Apps []App `json:"apps"`
 }
 
@@ -52,24 +51,18 @@ func main() {
 }
 
 func (c *Config) loadConfig() error {
-	configFile, err := os.Open("config.json")
-	if err != nil {
-		log.Fatal()
-	}
-	defer configFile.Close()
-
-	byteValue, err := io.ReadAll(configFile)
+	dat, err := os.ReadFile("config.json")
 	if err != nil {
 		return err
 	}
 
-	if err := json.Unmarshal(byteValue, &config); err != nil {
+	if err := json.Unmarshal(dat, &config); err != nil {
 		return fmt.Errorf("failed to parse config json: %v", err)
 	}
-	if config.key == "" {
+	if config.Key == "" {
 		return errors.New("no key found in config.json. Please add a key, see config.json.sample")
 	}
-	if config.key == "EXECAPI_KEY_HERE" {
+	if config.Key == "EXECAPI_KEY_HERE" {
 		return errors.New("please add a custom key to the config.json.")
 	}
 	if len(config.Apps) == 0 {
@@ -83,7 +76,7 @@ func (c *Config) loadConfig() error {
 }
 
 func handleRun(w http.ResponseWriter, r *http.Request) {
-	if r.Header.Get("Authorization") != "Bearer "+config.key {
+	if r.Header.Get("Authorization") != "Bearer "+config.Key {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
