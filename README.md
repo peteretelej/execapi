@@ -51,3 +51,6 @@ Please consider configuring Exec API to only be accessible by intended clients. 
   - [Tailscale GitHub Action](https://github.com/tailscale/github-action)
 - Logging and Monitoring: Set up logging and monitoring to keep track of access
 - Use HTTPS: Secure communication between the client and server with HTTPS
+
+# License
+[MIT](./LICENSE)
