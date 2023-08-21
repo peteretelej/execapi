@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -31,19 +32,14 @@ var appByName map[string]*App
 var MaxTimeout = 10 * time.Minute
 
 func main() {
-	log.SetPrefix("godeploy: ")
-	deployKey := os.Getenv("GODEPLOY_KEY")
-	if deployKey == "" {
-		log.Fatal("GODEPLOY_KEY environment variable not set")
-	}
+	log.SetPrefix("execapi: ")
 	if err := config.loadConfig(); err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
-	config.key = deployKey
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {})
-	mux.HandleFunc("/deploy/", handleDeploy)
+	mux.HandleFunc("/run/", handleRun)
 	fmt.Println("Server running at http://localhost:8080")
 
 	svr := &http.Server{
@@ -70,6 +66,12 @@ func (c *Config) loadConfig() error {
 	if err := json.Unmarshal(byteValue, &config); err != nil {
 		return fmt.Errorf("failed to parse config json: %v", err)
 	}
+	if config.key == "" {
+		return errors.New("no key found in config.json. Please add a key, see config.json.sample")
+	}
+	if config.key == "EXECAPI_KEY_HERE" {
+		return errors.New("please add a custom key to the config.json.")
+	}
 	if len(config.Apps) == 0 {
 		return fmt.Errorf("no apps found in config.json. Please add at least one app, see config.json.sample")
 	}
@@ -80,13 +82,13 @@ func (c *Config) loadConfig() error {
 	return nil
 }
 
-func handleDeploy(w http.ResponseWriter, r *http.Request) {
+func handleRun(w http.ResponseWriter, r *http.Request) {
 	if r.Header.Get("Authorization") != "Bearer "+config.key {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
 
-	appName := r.URL.Path[len("/deploy/"):]
+	appName := r.URL.Path[len("/run/"):]
 	app, exists := appByName[appName]
 	if !exists {
 		http.Error(w, fmt.Sprintf("App '%s' not found", appName), http.StatusNotFound)
@@ -117,15 +119,15 @@ func handleDeploy(w http.ResponseWriter, r *http.Request) {
 
 	out, err := cmd.CombinedOutput()
 	if ctx.Err() == context.DeadlineExceeded {
-		http.Error(w, "Deployment timed out", http.StatusRequestTimeout)
+		http.Error(w, "Execution timed out", http.StatusRequestTimeout)
 		return
 	}
 	if err != nil {
-		out := fmt.Sprintf("Deployment failed: %v\n%s", err, string(out))
+		out := fmt.Sprintf("Execution failed: %v\n%s", err, string(out))
 		http.Error(w, out, http.StatusBadRequest)
 		return
 	}
-	log.Printf("Deployed %s, out:\n%s", app.Name, string(out))
+	log.Printf("Execution successful for %s, output:\n%s", app.Name, string(out))
 	w.WriteHeader(http.StatusOK)
 	if verbose {
 		w.Write(out)

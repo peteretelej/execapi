@@ -1,4 +1,5 @@
 {
+  "key": "EXECAPI_KEY_HERE",
   "apps": [
     {
       "name": "appx",
