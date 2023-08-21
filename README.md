@@ -8,7 +8,7 @@ Exec API enables the execution of predefined commands and scripts on servers via
 ## Running ExecAPI
 
 - Copy `config.json.sample` to `config.json`
-- Update the key value (used for authorizing API requests), and the app details as necessary
+- Update the key value (used for authorizing API requests), and the `commands` as necessary
 - Run execapi. Either by,
     - Grabbing the latest release from the [Releases page](https://github.com/peteretelej/execapi/releases)
     - Or, building and running `execapi`
@@ -26,7 +26,7 @@ Run Exec API on the server you'd like to execute commands or scripts.
 
 Assuming you have an application at `/home/user/apps/appx` that has a script `deploy.sh` in the directory, you can use the [./config.json.sample](./config.json.sample) as the config.json.
 
-Update `apps` to add different options as desired.
+Update `commands` to add different options as desired.
 
 ### Requesting command execution
 

@@ -1,8 +1,8 @@
 {
   "key": "EXECAPI_KEY_HERE",
-  "apps": [
+  "commands": [
     {
-      "name": "appx",
+      "name": "commandx",
       "dir": "/home/user/apps/appx",
       "script": "./deploy.sh",
       "timeout": "5m"
