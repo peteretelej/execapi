@@ -20,6 +20,15 @@ go build -o execapi .
 ./execapi
 ```
 
+Arguments:
+
+```
+./execapi --config /apps/execapi.config.json --listen 0.0.0.0:8081
+```
+
+- `config`: path to config.json (default "config.json")
+- `listen`: address to listen on (default "localhost:8080")
+
 Run Exec API on the server you'd like to execute commands or scripts.
 
 ## Usage

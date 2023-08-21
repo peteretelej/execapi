@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
@@ -31,8 +32,14 @@ var appByName map[string]*Command
 var MaxTimeout = 10 * time.Minute
 
 func main() {
+	var (
+		listenAddr = flag.String("listen", "localhost:8080", "address to listen on")
+		configPath = flag.String("config", "config.json", "path to config.json")
+	)
+	flag.Parse()
 	log.SetPrefix("execapi: ")
-	if err := config.loadConfig(); err != nil {
+
+	if err := config.loadConfig(*configPath); err != nil {
 		log.Fatalf("failed to load config: %v", err)
 	}
 
@@ -41,21 +48,20 @@ func main() {
 	mux.HandleFunc("/run/", handleRun)
 
 	svr := &http.Server{
-		Addr:         ":8080",
+		Addr:         *listenAddr,
 		Handler:      mux,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: MaxTimeout, // hold for long deploys
 	}
-	log.Printf("Server running at http://localhost:8080")
+	log.Printf("Server running at http://%s", *listenAddr)
 	log.Fatal(svr.ListenAndServe())
 }
 
-func (c *Config) loadConfig() error {
-	dat, err := os.ReadFile("config.json")
+func (c *Config) loadConfig(configFile string) error {
+	dat, err := os.ReadFile(configFile)
 	if err != nil {
 		return err
 	}
-
 	if err := json.Unmarshal(dat, &config); err != nil {
 		return fmt.Errorf("failed to parse config json: %v", err)
 	}
