@@ -1,0 +1,16 @@
+# Example Systemd service. update user name
+
+[Unit]
+Description=Exec API Systemd Service
+ConditionPathExists=/home/user/apps/execapi
+After=network.target
+
+[Service]
+Type=simple
+User=user
+ExecStart=/home/user/apps/execapi/execapi
+WorkingDirectory=/home/user/apps/execapi
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
