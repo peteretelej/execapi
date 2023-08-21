@@ -1,4 +1,4 @@
 config.json
-go-deploy
+execapi
 *.exe
 *.service
